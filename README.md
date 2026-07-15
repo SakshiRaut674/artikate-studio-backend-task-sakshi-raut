@@ -89,14 +89,15 @@ Not required for the automated test suite above, but used for the optional Loom 
 
 6. In a third terminal, submit real jobs:
    ```bash
+   $env:CELERY_TASK_ALWAYS_EAGER = "0"
    python manage.py shell
    ```
    ```python
-   from queue_app.models import EmailJobLog
-   from queue_app.tasks import send_transactional_email
-   for i in range(250):
-       job = EmailJobLog.objects.create(recipient=f"user{i}@example.com", subject="OTP")
-       send_transactional_email.delay(job.id, job.recipient, job.subject)
+from queue_app.models import EmailJobLog
+from queue_app.tasks import send_transactional_email
+for i in range(250):
+   job = EmailJobLog.objects.create(recipient=f"user{i}@example.com", subject="OTP")
+   send_transactional_email.delay(job.id, job.recipient, job.subject)
    ```
    Watch the worker terminal for real Redis-backed throttling at 200/min.
 
@@ -113,4 +114,5 @@ Not required for the automated test suite above, but used for the optional Loom 
 
 ## Loom recording
 
+https://drive.google.com/file/d/1YzfQ-3Q1KAC3QUjgmay4-uBkSOz8B5Xa/view?usp=sharing
 
